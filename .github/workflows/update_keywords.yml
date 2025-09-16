@@ -3,44 +3,33 @@
 name: AI Trend Keyword Generator
 
 on:
-  # 1. 스케줄 실행: 한국 시간 기준 매일 아침 9시에 자동으로 실행됩니다.
   schedule:
-    - cron: '0 0 * * *' # UTC 기준 00:00 (KST 09:00)
-  # 2. 수동 실행: GitHub의 'Actions' 탭에서 언제든지 수동으로 실행할 수 있습니다.
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
   build-and-commit:
     runs-on: ubuntu-latest
-    
-    # 이 작업이 저장소의 콘텐츠를 수정(write)할 수 있도록 권한을 부여합니다.
     permissions:
       contents: write
-
     steps:
-      # 1. 코드 체크아웃: 저장소의 코드를 서버로 가져옵니다.
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. 파이썬 환경 설정: 파이썬 3.11 버전을 설치합니다.
-      - name: Set up Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # 3. 파이썬 라이브러리 설치
       - name: Install dependencies
         run: pip install requests python-dotenv google-generativeai
 
-      # 4. 키워드 생성 스크립트 실행
       - name: Run keyword generator script
         env:
-          # GitHub Secrets에 저장된 API 키를 스크립트가 사용할 수 있도록 전달합니다.
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python keyword_generator.py
 
-      # 5. 결과물(keywords.json) 자동 커밋
       - name: Commit and push if changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
