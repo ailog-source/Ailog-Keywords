@@ -1,0 +1,18 @@
+# .gitignore
+
+# 개인정보가 담긴 환경변수 파일
+.env
+
+# 파이썬 캐시 파일 및 폴더
+__pycache__/
+*.pyc
+
+# 사용자 데이터 및 인증 토큰이 저장되는 폴더
+/data/
+
+# 가상환경 폴더 (사용하는 경우)
+venv/
+.venv/
+
+# VS Code Local History 폴더
+/.history/
